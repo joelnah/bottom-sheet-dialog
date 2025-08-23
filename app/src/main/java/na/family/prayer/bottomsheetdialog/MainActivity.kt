@@ -8,24 +8,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import na.family.prayer.bottomsheetdialog.ui.theme.BottomSheetDialogTheme
-import na.family.prayer.lib.BottomSheetNavigator
 import na.family.prayer.lib.LocalBottomSheetNavigator
-import na.family.prayer.lib.bottomSheet
+import na.family.prayer.lib.bottomSheetDialog
+import na.family.prayer.lib.rememberBottomSheetNavigator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +31,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BottomSheetDialogTheme {
-                val navController = rememberNavController()
-                val bottomSheetNavigator = remember { BottomSheetNavigator(navController) }
+                val bottomSheetNavigator = rememberBottomSheetNavigator()
+
                 CompositionLocalProvider(
                     LocalBottomSheetNavigator provides bottomSheetNavigator,
                 ) {
@@ -42,15 +40,14 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         modifier = Modifier.fillMaxSize(),
                         startDestination = "home",
-                        navController = navController
+                        navController = bottomSheetNavigator.navController
                     ) {
-                        composable("home") { HomeScreen() }
+                        composable("home") {
+                            HomeScreen()
+                        }
 
                         // Bottom Sheet Dialog
-                        bottomSheet(
-                            route = "bottomSheet",
-                            skipPartiallyExpanded = false,
-                        ) {
+                        bottomSheetDialog(route = "bottomSheet") {
                             BottomSheetDialog()
                         }
                     }
@@ -64,7 +61,7 @@ class MainActivity : ComponentActivity() {
 fun HomeScreen(){
     val bottomSheetNavigator = LocalBottomSheetNavigator.current
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().systemBarsPadding(),
         topBar = {
             Text(text = "Home Screen")
         },
@@ -75,6 +72,7 @@ fun HomeScreen(){
                     .padding(innerPadding)
             ) {
                 Button(
+                    modifier = Modifier.align(Alignment.Center),
                     onClick = {
                         bottomSheetNavigator.navigate("bottomSheet")
                     }
