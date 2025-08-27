@@ -22,7 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import na.family.prayer.bottomsheetdialog.ui.theme.BottomSheetDialogTheme
 import na.family.prayer.lib.LocalBottomSheetNavigator
-import na.family.prayer.lib.bottomSheetDialog
+import na.family.prayer.lib.sheetDialog
 import na.family.prayer.lib.rememberBottomSheetNavigator
 
 class MainActivity : ComponentActivity() {
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         // Bottom Sheet Dialog
-                        bottomSheetDialog(route = "bottomSheet") {
+                        sheetDialog(route = "bottomSheet") {
                             BottomSheetDialog()
                         }
                     }
@@ -61,7 +61,9 @@ class MainActivity : ComponentActivity() {
 fun HomeScreen(){
     val bottomSheetNavigator = LocalBottomSheetNavigator.current
     Scaffold(
-        modifier = Modifier.fillMaxSize().systemBarsPadding(),
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding(),
         topBar = {
             Text(text = "Home Screen")
         },

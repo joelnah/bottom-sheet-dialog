@@ -54,6 +54,15 @@ class BottomSheetNavigator(val navController: NavHostController) {
         _currentState.value = BottomSheetValue.Expanded
     }
 
+    // BottomSheet 열기
+    fun <T>navigate(route: String, argument: T) {
+        if (!activeRoutes.add(route)) return
+
+        currentRoute = route
+        navController.navigate(route, argument)
+        _currentState.value = BottomSheetValue.Expanded
+    }
+
     // BottomSheet 닫기
     fun hide() {
         _currentState.value = BottomSheetValue.Hidden
@@ -67,7 +76,7 @@ class BottomSheetNavigator(val navController: NavHostController) {
 }
 
 // NavGraphBuilder 확장 함수
-fun NavGraphBuilder.bottomSheetDialog(
+fun NavGraphBuilder.sheetDialog(
     route: String,
     dragEnabled: Boolean = true,
     skipPartiallyExpanded: Boolean = false,
